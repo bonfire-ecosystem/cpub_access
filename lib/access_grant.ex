@@ -33,11 +33,12 @@ defmodule CommonsPub.Access.AccessGrant.Migration do
 
   defp make_access_grant_table(exprs) do
     quote do
+      require Pointers.Migration
       Pointers.Migration.create_pointable_table(CommonsPub.Access.AccessGrant) do
         Ecto.Migration.add :subject_id,
-          Pointers.Migrations.strong_pointer()
+          Pointers.Migration.strong_pointer()
         Ecto.Migration.add :access_id,
-          Pointers.Migrations.strong_pointer(CommonsPub.Access.Access)
+          Pointers.Migration.strong_pointer(CommonsPub.Access.Access)
         unquote_splicing(exprs)
       end
     end
@@ -82,7 +83,14 @@ defmodule CommonsPub.Access.AccessGrant.Migration do
 
   # migrate_access_grant/{0,1}
 
-  defp mag(:up), do: make_access_grant_table([])
+  defp mag(:up) do
+    quote do
+      require CommonsPub.Access.AccessGrant.Migration
+      CommonsPub.Access.AccessGrant.Migration.create_access_grant_table()
+      CommonsPub.Access.AccessGrant.Migration.create_access_grant_unique_index()
+      CommonsPub.Access.AccessGrant.Migration.create_access_grant_secondary_index()
+    end
+  end
   defp mag(:down) do
     quote do
       CommonsPub.Access.AccessGrant.Migration.drop_access_grant_secondary_index()

@@ -27,6 +27,7 @@ defmodule CommonsPub.Access.Access.Migration do
 
   defp make_access_table(exprs) do
     quote do
+      require Pointers.Migration
       Pointers.Migration.create_pointable_table(CommonsPub.Access.Access) do
         unquote_splicing(exprs)
       end
