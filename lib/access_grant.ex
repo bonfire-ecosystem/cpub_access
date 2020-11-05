@@ -85,9 +85,9 @@ defmodule CommonsPub.Access.AccessGrant.Migration do
   defp mag(:up), do: make_access_grant_table([])
   defp mag(:down) do
     quote do
-      CommonsPub.Accesss.AccessGrant.Migration.drop_access_grant_secondary_index()
-      CommonsPub.Accesss.AccessGrant.Migration.drop_access_grant_unique_index()
-      CommonsPub.Accesss.AccessGrant.Migration.drop_access_grant_table()
+      CommonsPub.Access.AccessGrant.Migration.drop_access_grant_secondary_index()
+      CommonsPub.Access.AccessGrant.Migration.drop_access_grant_unique_index()
+      CommonsPub.Access.AccessGrant.Migration.drop_access_grant_table()
     end
   end
 

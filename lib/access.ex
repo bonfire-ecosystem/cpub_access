@@ -44,7 +44,7 @@ defmodule CommonsPub.Access.Access.Migration do
 
   defp ma(:up), do: make_access_table([])
   defp ma(:down) do
-    quote do: CommonsPub.Access.Access.drop_access_table()
+    quote do: CommonsPub.Access.Access.Migration.drop_access_table()
   end
 
   defmacro migrate_access(dir \\ direction()), do: ma(dir)
