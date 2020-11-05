@@ -4,7 +4,7 @@ defmodule CommonsPub.Access.AccessGrant do
 
   use Pointers.Pointable,
     otp_app: :cpub_access,
-    table_id: "1NSERTSAP01NTER1NT0AC1RC1E",
+    table_id: "GRANTSS0MEACCESST0ASVBJECT",
     source: "cpub_access_access_grant"
 
   alias CommonsPub.Access.{Access, AccessGrant}
@@ -45,7 +45,7 @@ defmodule CommonsPub.Access.AccessGrant.Migration do
   end
 
   defmacro create_access_grant_table(), do: make_access_grant_table([])
-  defmacro create_access_grant_table([do: exprs]), do: make_access_grant_table(exprs)
+  defmacro create_access_grant_table([do: {_, _, body}]), do: make_access_grant_table(body)
 
   # drop_access_grant_table/0
 
@@ -70,7 +70,7 @@ defmodule CommonsPub.Access.AccessGrant.Migration do
   defp make_access_grant_secondary_index(opts) do
     quote do
       Ecto.Migration.create_if_not_exists(
-        Ecto.Migration.index(unquote(@access_grant_table), @secondary_index, unquote(opts))
+        Ecto.Migration.index(unquote(@access_grant_table), unquote(@secondary_index), unquote(opts))
       )
     end
   end
@@ -99,6 +99,14 @@ defmodule CommonsPub.Access.AccessGrant.Migration do
     end
   end
 
-  defmacro migrate_access_grant(dir \\ direction()), do: mag(dir)
+  defmacro migrate_access_grant() do
+    quote do
+      if Ecto.Migration.direction() == :up,
+        do: unquote(mag(:up)),
+        else: unquote(mag(:down))
+    end
+  end
+
+  defmacro migrate_access_grant(dir), do: mag(dir)
 
 end

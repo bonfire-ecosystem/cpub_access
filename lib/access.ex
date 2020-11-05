@@ -35,7 +35,7 @@ defmodule CommonsPub.Access.Access.Migration do
   end
 
   defmacro create_access_table(), do: make_access_table([])
-  defmacro create_access_table([do: body]), do: make_access_table(body)
+  defmacro create_access_table([do: {_, _, body}]), do: make_access_table(body)
 
   # drop_access_table/0
 
@@ -45,9 +45,19 @@ defmodule CommonsPub.Access.Access.Migration do
 
   defp ma(:up), do: make_access_table([])
   defp ma(:down) do
-    quote do: CommonsPub.Access.Access.Migration.drop_access_table()
+    quote do
+      require CommonsPub.Access.Access.Migration
+      CommonsPub.Access.Access.Migration.drop_access_table()
+    end
   end
 
-  defmacro migrate_access(dir \\ direction()), do: ma(dir)
+  defmacro migrate_access() do
+    quote do
+      if Ecto.Migration.direction() == :up,
+        do: unquote(ma(:up)),
+        else: unquote(ma(:down))
+    end
+  end
+  defmacro migrate_access(dir), do: ma(dir)
 
 end
