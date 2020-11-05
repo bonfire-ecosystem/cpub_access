@@ -8,7 +8,7 @@ defmodule CommonsPub.Access.Access do
     source: "cpub_access_access"
 
   alias CommonsPub.Access.Access
-  alias Pointers.{Changesets, Pointer}
+  alias Pointers.Changesets
 
   pointable_schema do
   end
@@ -23,21 +23,30 @@ defmodule CommonsPub.Access.Access.Migration do
   import Pointers.Migration
   alias CommonsPub.Access.Access
 
-  defmacro create_access_table(), do: make_access_table([])
-  defmacro create_access_table([do: body]), do: make_access_table(body)
+  # create_access_table/{0,1}
 
   defp make_access_table(exprs) do
     quote do
-      Pointers.Migration.create_pointable_table(Access) do
+      Pointers.Migration.create_pointable_table(CommonsPub.Access.Access) do
         unquote_splicing(exprs)
       end
     end
   end
 
+  defmacro create_access_table(), do: make_access_table([])
+  defmacro create_access_table([do: body]), do: make_access_table(body)
+
+  # drop_access_table/0
+
   def drop_access_table(), do: drop_pointable_table(Access)
 
-  def migrate_access(dir \\ direction())
-  def migrate_access(:up), do: create_access_table
-  def migrate_access(:down), do: drop_access_table()
+  # migrate_access/{0,1}
+
+  defp ma(:up), do: make_access_table([])
+  defp ma(:down) do
+    quote do: CommonsPub.Access.Access.drop_access_table()
+  end
+
+  defmacro migrate_access(dir \\ direction()), do: ma(dir)
 
 end

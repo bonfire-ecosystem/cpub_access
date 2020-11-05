@@ -1,20 +1,20 @@
-defmodule CommonsPub.Acls.MixProject do
+defmodule CommonsPub.Access.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :cpub_acls,
+      app: :cpub_access,
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
-      description: "Acl-related models for commonspub",
-      homepage_url: "https://github.com/commonspub/cpub_acls",
-      source_url: "https://github.com/commonspub/cpub_acls",
+      description: "Access-related models for commonspub",
+      homepage_url: "https://github.com/commonspub/cpub_access",
+      source_url: "https://github.com/commonspub/cpub_accesss",
       package: [
         licenses: ["MPL 2.0"],
         links: %{
-          "Repository" => "https://github.com/commonspub/cpub_acls",
-          "Hexdocs" => "https://hexdocs.pm/cpub_acls",
+          "Repository" => "https://github.com/commonspub/cpub_access",
+          "Hexdocs" => "https://hexdocs.pm/cpub_access",
         },
       ],
       docs: [
@@ -25,18 +25,10 @@ defmodule CommonsPub.Acls.MixProject do
     ]
   end
 
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
+  def application, do: [ extra_applications: [:logger] ]
 
   defp deps do
-    [
-      {:pointers, "~> 0.5.1"},
-      # {:pointers, git: "https://github.com/commonspub/pointers", branch: "main"},
-      # {:pointers, path: "../pointers", override: true},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-    ]
+    Mess.deps [{:ex_doc, ">= 0.0.0", only: :dev, runtime: false}]
   end
+
 end
