@@ -36,9 +36,9 @@ defmodule CommonsPub.Access.AccessGrant.Migration do
       require Pointers.Migration
       Pointers.Migration.create_pointable_table(CommonsPub.Access.AccessGrant) do
         Ecto.Migration.add :subject_id,
-          Pointers.Migration.strong_pointer()
+          Pointers.Migration.strong_pointer(), null: false
         Ecto.Migration.add :access_id,
-          Pointers.Migration.strong_pointer(CommonsPub.Access.Access)
+          Pointers.Migration.strong_pointer(CommonsPub.Access.Access), null: false
         unquote_splicing(exprs)
       end
     end
